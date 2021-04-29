@@ -2,9 +2,12 @@ package com.macky.springbootshardingjdbc.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonView;
 import groovy.transform.EqualsAndHashCode;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.Pattern;
 
 /**
  * @author ZhangPeng
@@ -17,7 +20,21 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("book")
 public class Book extends Model<Book> {
+
+    public interface BookViewForm {
+    }
+
+    public interface BookViewDetail {
+    }
+
+
+    @JsonView(BookViewForm.class)
     private int id;
+
+    @JsonView(BookViewDetail.class)
     private String name;
-    private int count;
+
+    @JsonView(BookViewDetail.class)
+    @Pattern(regexp = "^[1-9]\\d*$", message = "件数不合法")
+    private String count;
 }
